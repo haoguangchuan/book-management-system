@@ -9,7 +9,7 @@ export class CreateBookDto {
 
   @IsNotEmpty({ message: '描述不能为空' })
   description: string;
-
-  @IsNotEmpty({ message: '封面不能为空' })
-  cover: string;
+  
+  coverImage: string;
+  bookFile: string;
 }

@@ -28,26 +28,27 @@ export class BookService {
     book.id = generateId();
     book.name = createBookDto.name;
     book.author = createBookDto.author;
-    book.cover = createBookDto.cover;
     book.description = createBookDto.description;
+    book.coverImage = createBookDto.coverImage;
+    book.bookFile = createBookDto.bookFile;
     books.push(book);
     await this.dbService.write(books);
     return book;
   }
 
-  async update(updateBookDto: UpdateBookDto) {
-    console.log(updateBookDto);
+  async update(id: number, updateBookDto: UpdateBookDto) {
     const books: Book[] = (await this.dbService.read()) as Book[];
 
     const foundBook: Book | undefined = books.find(
-      (book) => book.id === updateBookDto.id,
+      (book) => book.id === id,
     );
     if (!foundBook) {
       throw new BadRequestException({ message: '书籍不存在' });
     }
     foundBook.name = updateBookDto.name;
     foundBook.author = updateBookDto.author;
-    foundBook.cover = updateBookDto.cover;
+    foundBook.coverImage = updateBookDto.coverImage;
+    foundBook.bookFile = updateBookDto.bookFile;
     foundBook.description = updateBookDto.description;
     await this.dbService.write(books);
     return foundBook;
