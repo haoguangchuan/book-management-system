@@ -1,4 +1,9 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { DbService } from '../db/db.service';
@@ -11,8 +16,11 @@ export class BookService {
   @Inject()
   dbService: DbService;
 
+  private readonly logger = new Logger(BookService.name);
+
   async list() {
     const books: Book[] = (await this.dbService.read()) as Book[];
+    this.logger.log(`书籍列表: ${JSON.stringify(books)}`);
     return books;
   }
 
@@ -39,9 +47,7 @@ export class BookService {
   async update(id: number, updateBookDto: UpdateBookDto) {
     const books: Book[] = (await this.dbService.read()) as Book[];
 
-    const foundBook: Book | undefined = books.find(
-      (book) => book.id === id,
-    );
+    const foundBook: Book | undefined = books.find((book) => book.id === id);
     if (!foundBook) {
       throw new BadRequestException({ message: '书籍不存在' });
     }
@@ -61,6 +67,7 @@ export class BookService {
       books.splice(index, 1);
       await this.dbService.write(books);
     }
+    this.logger.log(`书籍删除: ${id}`);
     return { message: '删除成功' };
   }
 }
