@@ -87,7 +87,7 @@ export class BookController {
   ) {
     // 先获取原有书籍信息，用于保留未更新的文件路径
     const existingBook = await this.bookService.findById(id);
-    
+
     // 从 FormData 中提取文本字段
     const updateBookDto: UpdateBookDto = {
       name: body.name,
